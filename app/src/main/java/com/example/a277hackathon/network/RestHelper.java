@@ -51,6 +51,7 @@ public class RestHelper extends Thread {
     private JSONObject getJSON(String endpoint) throws JSONException {
         String jsonString = "";
         String a = "";
+        Log.d("RestHelper", "endpoint: " + endpoint);
         if (endpoint.equals("Debt")) {
             a = "https://tzstkiqn45.execute-api.us-east-1.amazonaws.com/prod/finances?" + "country="+ URLEncoder.encode(country)
                     + "&indicator=" + URLEncoder.encode(indicator);
@@ -58,7 +59,7 @@ public class RestHelper extends Thread {
             a = "https://tzstkiqn45.execute-api.us-east-1.amazonaws.com/prod/gdp?" + "country="+ URLEncoder.encode(country)
                     + "&indicator=" + URLEncoder.encode(filter);
         } else if (endpoint.equals("Agriculture")) {
-            a = "https://tzstkiqn45.execute-api.us-east-1.amazonaws.com/prod/agriculture?" + "country="+ URLEncoder.encode(country)
+            a = "https://tzstkiqn45.execute-api.us-east-1.amazonaws.com/prod/agricultural?" + "country="+ URLEncoder.encode(country)
                     + "&indicator=" + URLEncoder.encode(indicator);
         } else {
             return null;

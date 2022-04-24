@@ -18,6 +18,7 @@ import java.util.List;
 public class ResearcherActivity extends AppCompatActivity {
 
     private ArrayList<String> mCountries = new ArrayList<String>();
+    private ArrayList<String> mYears = new ArrayList<String>();
     private int countrySelection;
     private String graphSelection;
     private JSONObject obj;
@@ -36,13 +37,13 @@ public class ResearcherActivity extends AppCompatActivity {
         this.addFragment(R.id.researcher_container_country, CountrySelectionFragment.class);
         this.addFragment(R.id.researcher_container_logo, LogoFragment.class);
         this.addFragment(R.id.graph_selection_researcher, GraphSelectionFragment.class);
-//        this.addFragment2(R.id.researcher_container_graph, new ChartFragment(this.graphData));
         this.addFragment2(R.id.researcher_container_annotation, AnnotationFragment.newInstance());
     }
 
     private void addFragment(int id, Class cClass) {
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("countries", this.mCountries);
+        bundle.putStringArrayList("years", this.mYears);
 
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
@@ -64,6 +65,9 @@ public class ResearcherActivity extends AppCompatActivity {
             if (fragment.getClass() == ChartFragment.class) {
                 getSupportFragmentManager().beginTransaction().remove(fragment).commit();
             }
+            if (fragment.getClass() == YearSelectionFragment.class) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
             Log.d("GovernmentActivity", "fragment: " + fragment.toString());
         }
     }
@@ -72,6 +76,9 @@ public class ResearcherActivity extends AppCompatActivity {
         Log.d("ResearcherActivity", "setGraphSelection: " + graph);
         this.graphSelection = graph;
         String indicator = "GNI (current US$)";
+        if (this.graphSelection.equals("Agriculture")) {
+            indicator = "Fertilizer consumption (kilograms per hectare of arable land)";
+        }
         RestHelper helper = new RestHelper(mCountries.get(this.countrySelection), indicator, "gdp", this.graphSelection, ResearcherActivity.this, getApplicationContext());
         helper.start();
     }
@@ -98,9 +105,21 @@ public class ResearcherActivity extends AppCompatActivity {
             this.graphData = new ArrayList<>();
             this.graphData.add(data);
             this.removeFragments();
+            //this.getYears(data);
             this.addFragment2(R.id.researcher_container_graph, new ChartFragment(this.graphData));
+//            this.addFragment(R.id.researcher_container_year, YearSelectionFragment.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void getYears(List<List<Float>> data) {
+        Log.d("ResearcherActivity", "getYears");
+        for (int i = 0; i < data.size(); i++) {
+//            Log.d("RearcherActivity getYears", String.valueOf(data.get(i).toString()));
+//            Log.d("RearcherActivity getYears2", String.valueOf(data.get(i).get(0).toString()));
+            this.mYears.add(String.valueOf(data.get(i).get(0)));
+        }
+        Log.d("RearcherActivity getYears", this.mYears.toString());
     }
 }
