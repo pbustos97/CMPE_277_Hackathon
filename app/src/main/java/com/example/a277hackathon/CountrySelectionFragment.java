@@ -61,6 +61,7 @@ public class CountrySelectionFragment extends Fragment {
                     Log.d("CountrySelectionFragment OnItemClick", "Selected country " + mCountryList.get(i));
                     selectedCountryPos = i;
                     selectedCountry = mCountryList.get(i);
+                    selectCountry(selectedCountryPos);
                 }
             });
         }
@@ -72,5 +73,16 @@ public class CountrySelectionFragment extends Fragment {
         super.onResume();
         ArrayAdapter arrayAdapter = new ArrayAdapter(requireContext(), R.layout.dropdown_item, this.mCountryList);
         this.autoCompleteTextView.setAdapter(arrayAdapter);
+    }
+
+    private void selectCountry(int country) {
+        Log.d("CountrySelectionFragment", "selectGraph: " + country);
+        Class parentClass = getActivity().getClass();
+        Log.d("CountrySelectionFragment", "parentClass: " + parentClass.toString());
+        if (parentClass == GovernmentActivity.class) {
+            ((GovernmentActivity)getActivity()).setCountrySelection(country);
+        } else if (parentClass == ResearcherActivity.class) {
+            ((ResearcherActivity)getActivity()).setCountrySelection(country);
+        }
     }
 }

@@ -12,6 +12,7 @@ public class GovernmentActivity extends AppCompatActivity {
 
     private ArrayList<String> mCountries = new ArrayList<String>();
     private String graphSelection;
+    private int countrySelection;
 
 
     @Override
@@ -65,5 +66,9 @@ public class GovernmentActivity extends AppCompatActivity {
     public void setGraphSelection(String graph) {
         Log.d("GovernmentActivity", "setGraphSelection: " + graph);
         this.graphSelection = graph;
+    }
+
+    public void setCountrySelection(int i) {
+        this.countrySelection = i;
     }
 }

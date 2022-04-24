@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.a277hackathon.network.RestHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ResearcherActivity extends AppCompatActivity {
 
     private ArrayList<String> mCountries = new ArrayList<String>();
+    private int countrySelection;
     private String graphSelection;
 
     @Override
@@ -66,5 +69,12 @@ public class ResearcherActivity extends AppCompatActivity {
     public void setGraphSelection(String graph) {
         Log.d("ResearcherActivity", "setGraphSelection: " + graph);
         this.graphSelection = graph;
+        String indicator = "GNI (current US$)";
+        RestHelper helper = new RestHelper(mCountries.get(this.countrySelection), indicator, ResearcherActivity.this, getApplicationContext());
+        helper.start();
+    }
+
+    public void setCountrySelection(int i) {
+        this.countrySelection = i;
     }
 }
