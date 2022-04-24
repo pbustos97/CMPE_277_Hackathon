@@ -95,9 +95,9 @@ public class ResearcherActivity extends AppCompatActivity {
             for (int i = 0; i < outerArray.length(); i++) {
                 List<Float> innerList = new ArrayList<Float>();
                 JSONArray innerArray = (JSONArray) outerArray.get(i);
-                Log.d("ResearcherActivity", "setData outerArray: " + outerArray.get(i).toString());
+//                Log.d("ResearcherActivity", "setData outerArray: " + outerArray.get(i).toString());
                 for (int j = 0; j < innerArray.length(); j++) {
-                    Log.d("ResearcherActivity", "setData innerArray: " + innerArray.get(j).toString());
+//                    Log.d("ResearcherActivity", "setData innerArray: " + innerArray.get(j).toString());
                     innerList.add(Float.valueOf(innerArray.get(j).toString()));
                 }
                 data.add(innerList);

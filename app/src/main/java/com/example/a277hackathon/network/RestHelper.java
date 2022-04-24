@@ -83,7 +83,7 @@ public class RestHelper extends Thread {
 
             String line;
             while ((line = br.readLine()) != null) {
-                Log.d("RestHelper", "getJSON read: " + line);
+//                Log.d("RestHelper", "getJSON read: " + line);
                 sb.append(line + "\n");
             }
             br.close();
@@ -113,7 +113,7 @@ public class RestHelper extends Thread {
             JSONArray jsonArray = (JSONArray)object.get("data");
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONArray jsonArray1 = (JSONArray) jsonArray.get(i);
-                Log.d("jsonArray1", jsonArray1.toString());
+//                Log.d("jsonArray1", jsonArray1.toString());
 
             }
 
