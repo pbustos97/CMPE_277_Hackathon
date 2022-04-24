@@ -8,6 +8,9 @@ import android.util.Log;
 
 import com.example.a277hackathon.network.RestHelper;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,8 @@ public class ResearcherActivity extends AppCompatActivity {
     private ArrayList<String> mCountries = new ArrayList<String>();
     private int countrySelection;
     private String graphSelection;
+    private JSONObject obj;
+    private List<List<List<Float>>> graphData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,23 +31,11 @@ public class ResearcherActivity extends AppCompatActivity {
         mCountries.add("China");
         mCountries.add("India");
 
-        List<Float> inner = new ArrayList<>();
-        inner.add(1f);
-        inner.add(2f);
-        List<Float> inneralt = new ArrayList<>();
-        inneralt.add(1f);
-        inneralt.add(20f);
-        List<List<Float>> inner2 = new ArrayList<>();
-        inner2.add(inner);
-        inner2.add(inneralt);
-        List<List<List<Float>>> data = new ArrayList<>();
-        data.add(inner2);
-
 
         this.addFragment(R.id.researcher_container_country, CountrySelectionFragment.class);
         this.addFragment(R.id.researcher_container_logo, LogoFragment.class);
         this.addFragment(R.id.graph_selection_researcher, GraphSelectionFragment.class);
-        this.addFragment2(R.id.researcher_container_graph, new ChartFragment(data));
+//        this.addFragment2(R.id.researcher_container_graph, new ChartFragment(this.graphData));
         this.addFragment2(R.id.researcher_container_annotation, AnnotationFragment.newInstance());
     }
 
@@ -70,11 +63,34 @@ public class ResearcherActivity extends AppCompatActivity {
         Log.d("ResearcherActivity", "setGraphSelection: " + graph);
         this.graphSelection = graph;
         String indicator = "GNI (current US$)";
-        RestHelper helper = new RestHelper(mCountries.get(this.countrySelection), indicator, ResearcherActivity.this, getApplicationContext());
+        RestHelper helper = new RestHelper(mCountries.get(this.countrySelection), indicator, "gdp", this.graphSelection, ResearcherActivity.this, getApplicationContext());
         helper.start();
     }
 
     public void setCountrySelection(int i) {
         this.countrySelection = i;
+    }
+
+    public void setData(JSONObject obj) {
+        this.obj = obj;
+        try {
+            JSONArray outerArray = (JSONArray) obj.get("data");
+            List<List<Float>> data = new ArrayList<List<Float>>();
+            for (int i = 0; i < outerArray.length(); i++) {
+                List<Float> innerList = new ArrayList<Float>();
+                JSONArray innerArray = (JSONArray) outerArray.get(i);
+                Log.d("ResearcherActivity", "setData outerArray: " + outerArray.get(i).toString());
+                for (int j = 0; j < innerArray.length(); j++) {
+                    Log.d("ResearcherActivity", "setData innerArray: " + innerArray.get(j).toString());
+                    innerList.add(Float.valueOf(innerArray.get(j).toString()));
+                }
+                data.add(innerList);
+            }
+            this.graphData = new ArrayList<>();
+            this.graphData.add(data);
+            this.addFragment2(R.id.researcher_container_graph, new ChartFragment(this.graphData));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

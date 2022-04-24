@@ -46,13 +46,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         requestPermissions();
-        try {
-            RestHelper helper = new RestHelper("India", "GNI (current US$)", MainActivity.this, getApplicationContext());
-            helper.start();
-//            Thread.sleep(5000);
-        } catch (Exception e) {
-            Log.e("MainActivity", "onResume: " + e.getMessage());
-        }
     }
 
     @Override
@@ -64,12 +57,12 @@ public class MainActivity extends AppCompatActivity {
     private boolean changeActivity(String selectedActivity) {
         Bundle bundle = new Bundle();
         bundle.putString("activityName", selectedActivity);
-        Log.d("MainActivity", tmpObject.toString());
-        try {
-            Log.d("MainActivity", tmpObject.getString("data"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        //Log.d("MainActivity", tmpObject.toString());
+//        try {
+//            Log.d("MainActivity", tmpObject.getString("data"));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
         Class selectedClass = null;
 

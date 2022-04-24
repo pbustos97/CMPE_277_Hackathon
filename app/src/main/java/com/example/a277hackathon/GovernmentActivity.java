@@ -5,6 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.a277hackathon.network.RestHelper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +18,8 @@ public class GovernmentActivity extends AppCompatActivity {
     private ArrayList<String> mCountries = new ArrayList<String>();
     private String graphSelection;
     private int countrySelection;
+    private JSONObject obj;
+    private List<List<List<Float>>> graphData;
 
 
     @Override
@@ -66,9 +73,35 @@ public class GovernmentActivity extends AppCompatActivity {
     public void setGraphSelection(String graph) {
         Log.d("GovernmentActivity", "setGraphSelection: " + graph);
         this.graphSelection = graph;
+        String indicator = "GNI (current US$)";
+        RestHelper helper = new RestHelper(mCountries.get(this.countrySelection), indicator, "gdp", this.graphSelection, GovernmentActivity.this, getApplicationContext());
+        helper.start();
     }
 
     public void setCountrySelection(int i) {
         this.countrySelection = i;
+    }
+
+    public void setData(JSONObject obj) {
+        this.obj = obj;
+        try {
+            JSONArray outerArray = (JSONArray) obj.get("data");
+            List<List<Float>> data = new ArrayList<List<Float>>();
+            for (int i = 0; i < outerArray.length(); i++) {
+                List<Float> innerList = new ArrayList<Float>();
+                JSONArray innerArray = (JSONArray) outerArray.get(i);
+                Log.d("GovernmentActivity", "setData outerArray: " + outerArray.get(i).toString());
+                for (int j = 0; j < innerArray.length(); j++) {
+                    Log.d("GovernmentActivity", "setData innerArray: " + innerArray.get(j).toString());
+                    innerList.add(Float.valueOf(innerArray.get(j).toString()));
+                }
+                data.add(innerList);
+            }
+            this.graphData = new ArrayList<>();
+            this.graphData.add(data);
+            this.addFragment2(R.id.government_container_graph, new ChartFragment(this.graphData));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
