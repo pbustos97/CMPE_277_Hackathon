@@ -38,7 +38,7 @@ public class RestHelper extends Thread {
     private String endpoint;
     private AppCompatActivity activity;
     private Context ctx;
-    public String a;
+    String a = "";
     public RestHelper(String country, String indicator, String filter, String endpoint, AppCompatActivity activity, Context ctx) {
         this.country = country;
         this.indicator = indicator;
@@ -50,7 +50,8 @@ public class RestHelper extends Thread {
 
     private JSONObject getJSON(String endpoint) throws JSONException {
         String jsonString = "";
-        a = "";
+
+        Log.d("RestHelper", "endpoint: " + endpoint);
         if (endpoint.equals("Debt")) {
             a = "https://tzstkiqn45.execute-api.us-east-1.amazonaws.com/prod/finances?" + "country="+ URLEncoder.encode(country)
                     + "&indicator=" + URLEncoder.encode(indicator);
@@ -82,7 +83,7 @@ public class RestHelper extends Thread {
 
             String line;
             while ((line = br.readLine()) != null) {
-                Log.d("RestHelper", "getJSON read: " + line);
+//                Log.d("RestHelper", "getJSON read: " + line);
                 sb.append(line + "\n");
             }
             br.close();
@@ -112,7 +113,7 @@ public class RestHelper extends Thread {
             JSONArray jsonArray = (JSONArray)object.get("data");
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONArray jsonArray1 = (JSONArray) jsonArray.get(i);
-                Log.d("jsonArray1", jsonArray1.toString());
+//                Log.d("jsonArray1", jsonArray1.toString());
 
             }
 
