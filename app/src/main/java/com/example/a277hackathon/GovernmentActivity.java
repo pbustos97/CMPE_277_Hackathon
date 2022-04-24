@@ -1,6 +1,7 @@
 package com.example.a277hackathon;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GovernmentActivity extends AppCompatActivity {
 
@@ -69,6 +71,14 @@ public class GovernmentActivity extends AppCompatActivity {
                 .commit();
     }
 
+    private void removeFragments() {
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment.getClass() == ChartFragment.class) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+            Log.d("GovernmentActivity", "fragment: " + fragment.toString());
+        }
+    }
 
     public void setGraphSelection(String graph) {
         Log.d("GovernmentActivity", "setGraphSelection: " + graph);
@@ -99,6 +109,7 @@ public class GovernmentActivity extends AppCompatActivity {
             }
             this.graphData = new ArrayList<>();
             this.graphData.add(data);
+            this.removeFragments();
             this.addFragment2(R.id.government_container_graph, new ChartFragment(this.graphData));
         } catch (Exception e) {
             e.printStackTrace();

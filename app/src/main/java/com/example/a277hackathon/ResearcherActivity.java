@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.a277hackathon.network.RestHelper;
+import com.github.mikephil.charting.charts.Chart;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -58,6 +59,14 @@ public class ResearcherActivity extends AppCompatActivity {
                 .commit();
     }
 
+    private void removeFragments() {
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment.getClass() == ChartFragment.class) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
+            Log.d("GovernmentActivity", "fragment: " + fragment.toString());
+        }
+    }
 
     public void setGraphSelection(String graph) {
         Log.d("ResearcherActivity", "setGraphSelection: " + graph);
@@ -88,6 +97,7 @@ public class ResearcherActivity extends AppCompatActivity {
             }
             this.graphData = new ArrayList<>();
             this.graphData.add(data);
+            this.removeFragments();
             this.addFragment2(R.id.researcher_container_graph, new ChartFragment(this.graphData));
         } catch (Exception e) {
             e.printStackTrace();
