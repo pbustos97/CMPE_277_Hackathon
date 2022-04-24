@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.a277hackathon.Database.DatabaseHelper;
 import com.example.a277hackathon.network.RestHelper;
 
 import org.json.JSONException;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 changeActivity("Government");
             }
         });
-
+        DatabaseHelper helper = new DatabaseHelper(this);
         requestPermissions();
     }
 

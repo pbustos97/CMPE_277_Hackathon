@@ -38,7 +38,7 @@ public class RestHelper extends Thread {
     private String endpoint;
     private AppCompatActivity activity;
     private Context ctx;
-
+    public String a;
     public RestHelper(String country, String indicator, String filter, String endpoint, AppCompatActivity activity, Context ctx) {
         this.country = country;
         this.indicator = indicator;
@@ -50,7 +50,7 @@ public class RestHelper extends Thread {
 
     private JSONObject getJSON(String endpoint) throws JSONException {
         String jsonString = "";
-        String a = "";
+        a = "";
         if (endpoint.equals("Debt")) {
             a = "https://tzstkiqn45.execute-api.us-east-1.amazonaws.com/prod/finances?" + "country="+ URLEncoder.encode(country)
                     + "&indicator=" + URLEncoder.encode(indicator);
@@ -58,7 +58,7 @@ public class RestHelper extends Thread {
             a = "https://tzstkiqn45.execute-api.us-east-1.amazonaws.com/prod/gdp?" + "country="+ URLEncoder.encode(country)
                     + "&indicator=" + URLEncoder.encode(filter);
         } else if (endpoint.equals("Agriculture")) {
-            a = "https://tzstkiqn45.execute-api.us-east-1.amazonaws.com/prod/agriculture?" + "country="+ URLEncoder.encode(country)
+            a = "https://tzstkiqn45.execute-api.us-east-1.amazonaws.com/prod/agricultural?" + "country="+ URLEncoder.encode(country)
                     + "&indicator=" + URLEncoder.encode(indicator);
         } else {
             return null;
@@ -136,7 +136,7 @@ public class RestHelper extends Thread {
             if (activity.getClass() == MainActivity.class) {
                 ((MainActivity)activity).setJsonObject(object);
             } else if (activity.getClass() == ResearcherActivity.class) {
-                ((ResearcherActivity)activity).setData(object);
+                ((ResearcherActivity)activity).setData(object, a);
             } else if (activity.getClass() == GovernmentActivity.class) {
                 ((GovernmentActivity)activity).setData(object);
             }

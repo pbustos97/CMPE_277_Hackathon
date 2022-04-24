@@ -6,8 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.a277hackathon.Model.Agricultural;
-import com.example.a277hackathon.Model.Macroeconomic;
 import com.example.a277hackathon.Model.Trade;
 
 import java.util.ArrayList;
@@ -25,8 +23,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE trade (url VARCHAR(255), datapoint VARCHAR(255))");
-        sqLiteDatabase.execSQL("CREATE TABLE macroeconomic (url VARCHAR(255), datapoint VARCHAR(255))");
-        sqLiteDatabase.execSQL("CREATE TABLE agricultural (url VARCHAR(255), datapoint VARCHAR(255))");
     }
 
     @Override
@@ -41,15 +37,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void dropTrade() {
         SQLiteDatabase database = getWritableDatabase();
         database.execSQL("DROP TABLE trade");
-    }
-    public void insertMacroeconomic(Macroeconomic macroeconomic) {
-        SQLiteDatabase database = getWritableDatabase();
-        database.execSQL("INSERT INTO macroeconomic(url, datapoint) VALUES(?,?)", new Object[]{macroeconomic.getUrl(), macroeconomic.getDatapoint()});
-    }
-
-    public void insertAgricultural(Agricultural agricultural) {
-        SQLiteDatabase database = getWritableDatabase();
-        database.execSQL("INSERT INTO agricultural(url, datapoint) VALUES(?,?)", new Object[]{agricultural.getUrl(), agricultural.getDatapoint()});
     }
 
     @SuppressLint("Range")
@@ -80,60 +67,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return output;
     }
 
-    /**
-     * This is the call for graph library
-     * @param macroeconomic
-     * @return the list of list of list of float of macroeconomic information
-     */
-    public List<List<List<Float>>> convertMacList(Macroeconomic macroeconomic) {
-        List<List<List<Float>>> output = new ArrayList<>();
-        output.add(macroeconomic.toList());
-        return output;
-    }
-
-    /**
-     * This is the call for graph library
-     * @param agricultural
-     * @return the list of list of list of float of agricultural information
-     */
-    public List<List<List<Float>>> convertAgrList(Agricultural agricultural) {
-        List<List<List<Float>>> output = new ArrayList<>();
-        output.add(agricultural.toList());
-        return output;
-    }
-
-    @SuppressLint("Range")
-    public Macroeconomic readMacroeconomic(String url) {
-        SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor  = database.rawQuery(
-                "SELECT * FROM macroeconomic WHERE url=?",
-                new String[]{url});
-        if (cursor.moveToFirst()) {
-            Macroeconomic macroeconomic = new Macroeconomic();
-            macroeconomic.setUrl(cursor.getString(cursor.getColumnIndex("url")));
-            macroeconomic.setDatapoint(cursor.getString(cursor.getColumnIndex("datapoint")));
-            cursor.close();
-            return macroeconomic;
-        } else {
-            return null;
-        }
-    }
-    @SuppressLint("Range")
-    public Agricultural readAgricultural(String url) {
-        SQLiteDatabase database = getReadableDatabase();
-        Cursor cursor  = database.rawQuery(
-                "SELECT * FROM agricultural WHERE url=?",
-                new String[]{url});
-        if (cursor.moveToFirst()) {
-            Agricultural agricultural = new Agricultural();
-            agricultural.setUrl(cursor.getString(cursor.getColumnIndex("url")));
-            agricultural.setDatapoint(cursor.getString(cursor.getColumnIndex("datapoint")));
-            cursor.close();
-            return agricultural;
-        } else {
-            return null;
-        }
-    }
 
 
 }

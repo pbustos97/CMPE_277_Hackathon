@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.a277hackathon.Database.DatabaseHelper;
+import com.example.a277hackathon.Model.Trade;
 import com.example.a277hackathon.network.RestHelper;
 import com.github.mikephil.charting.charts.Chart;
 
@@ -21,6 +23,7 @@ public class ResearcherActivity extends AppCompatActivity {
     private int countrySelection;
     private String graphSelection;
     private JSONObject obj;
+    private DatabaseHelper databaseHelper;
     private List<List<List<Float>>> graphData;
 
     @Override
@@ -31,7 +34,7 @@ public class ResearcherActivity extends AppCompatActivity {
         mCountries.add("USA");
         mCountries.add("China");
         mCountries.add("India");
-
+        databaseHelper = new DatabaseHelper(this);
 
         this.addFragment(R.id.researcher_container_country, CountrySelectionFragment.class);
         this.addFragment(R.id.researcher_container_logo, LogoFragment.class);
@@ -80,7 +83,7 @@ public class ResearcherActivity extends AppCompatActivity {
         this.countrySelection = i;
     }
 
-    public void setData(JSONObject obj) {
+    public void setData(JSONObject obj, String url) {
         this.obj = obj;
         try {
             JSONArray outerArray = (JSONArray) obj.get("data");
@@ -95,6 +98,12 @@ public class ResearcherActivity extends AppCompatActivity {
                 }
                 data.add(innerList);
             }
+            Trade trade = new Trade();
+            trade.setUrl(url);
+            trade.setDatapoint(data.toString());
+            databaseHelper.insertTrade(trade);
+            Log.i("*** tread_db--->", databaseHelper.readTreade(trade.getUrl()).toString());
+
             this.graphData = new ArrayList<>();
             this.graphData.add(data);
             this.removeFragments();
