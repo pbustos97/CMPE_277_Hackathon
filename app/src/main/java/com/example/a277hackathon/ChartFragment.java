@@ -47,6 +47,8 @@ public class ChartFragment extends Fragment {
             LineDataSet lineDataset = new LineDataSet(values, "Country");
             lineDataset.setLineWidth(3);
             lineDataset.setColor(getResources().getColor(R.color.black));
+            lineDataset.setDrawValues(false);
+
             datasets.add(lineDataset);
         }
 
